@@ -39,14 +39,21 @@ class VisualSorting (QtGui.QWidget):
 		# radioButtons;
 		self.bubbleSort_RBtn1 = QtGui.QRadioButton('Unflagged BubbleSort')
 		self.bubbleSort_RBtn2 = QtGui.QRadioButton('Flagged BubbleSort')
+		self.quickSort_RBtn1 = QtGui.QRadioButton('QuickSort (Leftmost Elem. as Pivot)')
+		self.quickSort_RBtn2 = QtGui.QRadioButton('QuickSort (Middle Elem. as Pivot)')
+		self.insertionSort_RBtn1 = QtGui.QRadioButton('Insertion Sort')
+		self.shellSort_RBtn1 = QtGui.QRadioButton('Shell Sort')
+		self.selectionSort_RBtn1 = QtGui.QRadioButton('Selection Sort')
+		self.heapSort_RBtn1 = QtGui.QRadioButton('Heap Sort')
+		self.mergeSort_RBtn1 = QtGui.QRadioButton('Merge Sort')
 
 		# Creates the second groupBox to hold all the pushButtons;
 		groupBox2 = QtGui.QGroupBox('Execution')
 		groupBox2Layout = QtGui.QVBoxLayout()
 		groupBox2.setLayout(groupBox2Layout)
 		# pushButtons;
-		startBtn = QtGui.QPushButton('Start')
-		stopBtn = QtGui.QPushButton('Stop')
+		self.startBtn = QtGui.QPushButton('Start')
+		self.stopBtn = QtGui.QPushButton('Stop')
 
 		# Plot Area -----------------------------
 		# Creates the plotWidget that will display the data being sorted;
@@ -55,17 +62,28 @@ class VisualSorting (QtGui.QWidget):
 		# Adds all the Widgets and Layouts;
 		groupBox1Layout.addWidget(self.bubbleSort_RBtn1)
 		groupBox1Layout.addWidget(self.bubbleSort_RBtn2)
-		groupBox2Layout.addWidget(startBtn)
-		groupBox2Layout.addWidget(stopBtn)
+		groupBox1Layout.addWidget(self.quickSort_RBtn1)
+		groupBox1Layout.addWidget(self.quickSort_RBtn2)
+		groupBox1Layout.addWidget(self.insertionSort_RBtn1)
+		groupBox1Layout.addWidget(self.shellSort_RBtn1)
+		groupBox1Layout.addWidget(self.selectionSort_RBtn1)
+		groupBox1Layout.addWidget(self.heapSort_RBtn1)
+		groupBox1Layout.addWidget(self.mergeSort_RBtn1)
+
+		groupBox2Layout.addWidget(self.startBtn)
+		groupBox2Layout.addWidget(self.stopBtn)
+
 		verticalLayout.addWidget(groupBox1)
 		verticalLayout.addWidget(groupBox2)
+
 		verticalLayout.addStretch()
+
 		horizontalLayout.addLayout(verticalLayout)
 		horizontalLayout.addWidget(self.plotWidget)
 
 		# Adds all the Events;
-		startBtn.clicked.connect(self.clickedStart)
-		stopBtn.clicked.connect(self.clickedStop)
+		self.startBtn.clicked.connect(self.clickedStart)
+		self.stopBtn.clicked.connect(self.clickedStop)
 
 		# Sets the main window;
 		self.setLayout(horizontalLayout)
@@ -74,6 +92,7 @@ class VisualSorting (QtGui.QWidget):
 
 		# Checks a default sorting algorithm;
 		self.bubbleSort_RBtn1.setChecked(True)
+		self.stopBtn.setEnabled(False)
 
 		self.show()
 		sys.exit(self.app.exec_())
@@ -99,6 +118,10 @@ class VisualSorting (QtGui.QWidget):
 
 	# startBtn's function;
 	def clickedStart (self):
+		# Disables the startBtn and enables the stopBtn;
+		self.startBtn.setEnabled(False)
+		self.stopBtn.setEnabled(True)
+
 		# Prepares the sorting by setting the
 		# Sorter's control variable;
 		self.sorter.startAlgorithm()
@@ -109,11 +132,31 @@ class VisualSorting (QtGui.QWidget):
 
 		# Checks the active radioButton and
 		# calls the respective method;
-		if self.bubbleSort_RBtn1.isChecked() == True: self.sorter.unflaggedBubbleSort(self.data)
-		elif self.bubbleSort_RBtn2.isChecked() == True: self.sorter.flaggedBubbleSort(self.data)
+		if self.bubbleSort_RBtn1.isChecked() == True: 
+			self.sorter.unflaggedBubbleSort(self.data)
+		elif self.bubbleSort_RBtn2.isChecked() == True: 
+			self.sorter.flaggedBubbleSort(self.data)
+		elif self.quickSort_RBtn1.isChecked() == True: 
+			self.sorter.quickSort(self.data, 0, 99, 0)
+		elif self.quickSort_RBtn2.isChecked() == True: 
+			self.sorter.quickSort(self.data, 0, 99, 1)
+		elif self.insertionSort_RBtn1.isChecked() == True:
+			self.sorter.insertionSort(self.data)
+		elif self.shellSort_RBtn1.isChecked() == True:
+			self.sorter.shellSort(self.data)
+		elif self.selectionSort_RBtn1.isChecked() == True:
+			self.sorter.selectionSort(self.data)
+		elif self.heapSort_RBtn1.isChecked() == True:
+			self.sorter.heapSort(self.data)
+		elif self.mergeSort_RBtn1.isChecked() == True:
+			self.sorter.mergeSort(self.data, 0, 99)
 
 	# stopBtn's function;
 	def clickedStop (self):
+		# Disables the stopBtn and enables the startBtn;
+		self.startBtn.setEnabled(True)
+		self.stopBtn.setEnabled(False)
+
 		# Stops the sorting by resetting the
 		# Sorter's control variable;
 		self.sorter.stopAlgorithm()
